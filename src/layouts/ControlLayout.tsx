@@ -37,8 +37,8 @@ const ControlLayout = ({children, className}: Props) => {
      {children}
     </div>
 
-    <div className='p-5 flex w-full'>
-         <div className='flex items-center gap-x-2'><MountainIcon/></div>
+    <div className='p-5 gap-2 flex w-full'>
+         <div className='flex items-center gap-x-2'><MountainIcon color='#fff'/></div>
          <p className='text-white text-2xl'>Loomify</p>
       </div>
 
