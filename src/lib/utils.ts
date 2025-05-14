@@ -21,3 +21,14 @@ const response = await httpsClient.get(`/auth/${clerkId}`, {
 })
 return response.data
 }
+
+export const getMediaSources = async() => {
+const displays = await window.ipcRenderer.invoke('')
+
+const enumerateDevices = await window.navigator.mediaDevices.enumerateDevices()
+
+const audioInputs = enumerateDevices.filter((device) => device.kind === 'audioinput')
+
+console.log('getting sources')
+return {displays, audio: audioInputs}
+}
