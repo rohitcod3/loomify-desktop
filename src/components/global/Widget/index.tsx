@@ -3,6 +3,7 @@ import { Loader } from "../Loader";
 import { useEffect, useState } from "react";
 import { fetchUserProfile } from "@/lib/utils";
 import { useMediaSources } from "@/hooks/useMediaSource";
+import MediaConfiguration from "../MediaConfihuration";
 
 function Widget() {
     const [profile, setProfile] = useState<{
@@ -51,7 +52,10 @@ console.log(state)
             </div>
          </ClerkLoading>
          <SignedIn>
-            {profile ? (<MediaConfiguration/> )
+            {profile ? 
+            (<MediaConfiguration
+            
+            /> )
             : 
             (
                 <div className="w-full flex justify-center items-center">
