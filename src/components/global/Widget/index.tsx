@@ -16,7 +16,7 @@ function Widget() {
                 id:string
                 screen: string | null
                 mic: string | null
-                preset: string | null
+               preset: "HD" | "SD"
                 camera: string | null
                 userId: string | null
             } | null
@@ -36,13 +36,18 @@ function Widget() {
     const {user} = useUser();
 
     const {state, fetchMediaResources} = useMediaSources()
-console.log(state)
-    useEffect(() => { 
-        if(user && user.id){
-            fetchUserProfile(user.id).then((p) => setProfile(p))
-        }
+    console.log(state)
+   // in your component
+useEffect(() => {
+  if (!user) return;
+  fetchUserProfile(user.id)
+    .then((data) => {
+      console.log("🔍 API response for user:", data);
+      setProfile(data);
+    })
+    .catch(console.error);
+}, [user]);
 
-    }, [user])
     
   return (
     <div className="p-5">
@@ -54,7 +59,8 @@ console.log(state)
          <SignedIn>
             {profile ? 
             (<MediaConfiguration
-            
+            state={state}
+            user={profile?.user}
             /> )
             : 
             (

@@ -23,7 +23,7 @@ return response.data
 }
 
 export const getMediaSources = async() => {
-const displays = await window.ipcRenderer.invoke('')
+const displays = await window.ipcRenderer.invoke('getSources')
 
 const enumerateDevices = await window.navigator.mediaDevices.enumerateDevices()
 
