@@ -32,3 +32,21 @@ const audioInputs = enumerateDevices.filter((device) => device.kind === 'audioin
 console.log('getting sources')
 return {displays, audio: audioInputs}
 }
+
+export const  updateStudioSettings = async(
+  id:string,
+  screen:string,
+  audio:string,
+  preset: 'HD' | 'SD'
+) =>{
+ const response = await httpsClient.post(`/studio/${id}`, {screen,audio,preset},
+ {
+  headers:{
+    "Content-Type":"application/json",
+  }
+ }
+
+ )
+
+ return response.data
+}
