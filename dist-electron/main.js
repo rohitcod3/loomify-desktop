@@ -10,13 +10,63 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 
 let win;
 function createWindow() {
   win = new BrowserWindow({
+    width: 700,
+    height: 300,
+    minHeight: 600,
+    minWidth: 800,
+    frame: false,
+    transparent: true,
+    alwaysOnTop: true,
+    focusable: false,
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
     webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      devTools: true,
+      preload: path.join(__dirname, "preload.mjs")
+    }
+  });
+  new BrowserWindow({
+    width: 400,
+    height: 50,
+    minHeight: 70,
+    maxHeight: 400,
+    minWidth: 300,
+    maxWidth: 400,
+    frame: false,
+    transparent: true,
+    alwaysOnTop: true,
+    focusable: false,
+    icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      devTools: true,
+      preload: path.join(__dirname, "preload.mjs")
+    }
+  });
+  new BrowserWindow({
+    width: 400,
+    height: 200,
+    maxHeight: 400,
+    minHeight: 70,
+    maxWidth: 400,
+    minWidth: 300,
+    frame: false,
+    transparent: true,
+    alwaysOnTop: true,
+    focusable: false,
+    icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      devTools: true,
       preload: path.join(__dirname, "preload.mjs")
     }
   });
   win.webContents.on("did-finish-load", () => {
     win == null ? void 0 : win.webContents.send("main-process-message", (/* @__PURE__ */ new Date()).toLocaleString());
+    console.log("Window bounds after load:", win == null ? void 0 : win.getBounds());
   });
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL);

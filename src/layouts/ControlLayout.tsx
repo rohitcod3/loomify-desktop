@@ -19,19 +19,22 @@ const ControlLayout = ({children, className}: Props) => {
     <div className={cn(
         className,
         isVisible && 'invisible',
-        'bg-[#171717] flex px-1 flex-col rounded-3xl overflow-hidden h-screen'
+        'bg-[#171717] border-2 border-neutral-700 flex px-1 flex-col rounded-3xl overflow-hidden h-screen'
     )}
     >
-    <div className='flex justify-between items-center p-5 draggable'>
-    <span className='non-draggable'>
-     <UserButton/>
-     <X
-     size={20}
-     className='text-gray-400 non-draggable hover:text-white cursor-pointer'
-     onClick={onCloseApp}
-     />
-    </span>
-    </div>
+   <div className="flex justify-between items-center p-5 draggable">
+
+  <div className="non-draggable">
+    <UserButton />
+  </div>
+
+  <X
+    size={20}
+    className="text-gray-400 non-draggable hover:text-white cursor-pointer"
+    onClick={onCloseApp}
+  />
+</div>
+
 
     <div className='flex-1 h-0 overflow-auto'>
      {children}
