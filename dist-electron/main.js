@@ -8,6 +8,8 @@ const MAIN_DIST = path.join(process.env.APP_ROOT, "dist-electron");
 const RENDERER_DIST = path.join(process.env.APP_ROOT, "dist");
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, "public") : RENDERER_DIST;
 let win;
+let studio;
+let floatingWebCam;
 function createWindow() {
   win = new BrowserWindow({
     width: 700,
@@ -26,7 +28,7 @@ function createWindow() {
       preload: path.join(__dirname, "preload.mjs")
     }
   });
-  new BrowserWindow({
+  studio = new BrowserWindow({
     width: 400,
     height: 50,
     minHeight: 70,
@@ -45,7 +47,7 @@ function createWindow() {
       preload: path.join(__dirname, "preload.mjs")
     }
   });
-  new BrowserWindow({
+  floatingWebCam = new BrowserWindow({
     width: 400,
     height: 200,
     maxHeight: 400,
@@ -64,12 +66,24 @@ function createWindow() {
       preload: path.join(__dirname, "preload.mjs")
     }
   });
+  win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+  win.setAlwaysOnTop(true, "screen-saver", 1);
+  studio.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+  studio.setAlwaysOnTop(true, "screen-saver", 1);
   win.webContents.on("did-finish-load", () => {
     win == null ? void 0 : win.webContents.send("main-process-message", (/* @__PURE__ */ new Date()).toLocaleString());
     console.log("Window bounds after load:", win == null ? void 0 : win.getBounds());
   });
+  studio.webContents.on("did-finish-load", () => {
+    studio == null ? void 0 : studio.webContents.send(
+      "main-process-message",
+      (/* @__PURE__ */ new Date()).toLocaleString()
+    );
+  });
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL);
+    studio.loadURL(`${"http://localhost:5173"}/studio.html`);
+    floatingWebCam.loadURL(`${"http://localhost:5173"}/webcam.html`);
   } else {
     win.loadFile(path.join(RENDERER_DIST, "index.html"));
   }
