@@ -86,6 +86,8 @@ function createWindow() {
     floatingWebCam.loadURL(`${"http://localhost:5173"}/webcam.html`);
   } else {
     win.loadFile(path.join(RENDERER_DIST, "index.html"));
+    studio.loadFile(path.join(RENDERER_DIST, "studio.html"));
+    floatingWebCam.loadFile(path.join(RENDERER_DIST, "webcam.html"));
   }
 }
 app.on("window-all-closed", () => {
