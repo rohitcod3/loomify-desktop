@@ -37,7 +37,7 @@ function createWindow() {
     frame:false,
     transparent:true,
     alwaysOnTop:true,
-    focusable:false,
+    focusable:true,
     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
     webPreferences: {
       nodeIntegration:false,
@@ -54,8 +54,8 @@ function createWindow() {
     maxHeight:400,
     minWidth:300,
     maxWidth:400,
-    frame:false,
-    transparent:true,
+    frame:true,
+    transparent:false,
     alwaysOnTop:true,
     focusable:false,
     icon:path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
@@ -75,8 +75,8 @@ function createWindow() {
     minHeight:70,
     maxWidth:400,
     minWidth:300,
-    frame:false,
-    transparent:true,
+    frame:true,
+    transparent:false,
     alwaysOnTop:true,
     focusable:false,
     icon:path.join(process.env.VITE_PUBLIC,"electron-vite.svg"),
@@ -141,11 +141,13 @@ if(process.platform !== 'darwin'){
 })
 
 ipcMain.handle("getSources", async() => {
-  return await desktopCapturer.getSources({
+  const data = await desktopCapturer.getSources({
     thumbnailSize:{height:100, width:150},
     fetchWindowIcons:true,
     types: ['window', 'screen'],
   })
+   console.log("Displays", data)
+  return  data
 })
 
 ipcMain.on("media-sources", (event,payload) => {

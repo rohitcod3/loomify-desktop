@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, ipcMain, desktopCapturer, BrowserWindow } from "electron";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -19,7 +19,7 @@ function createWindow() {
     frame: false,
     transparent: true,
     alwaysOnTop: true,
-    focusable: false,
+    focusable: true,
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
     webPreferences: {
       nodeIntegration: false,
@@ -35,8 +35,8 @@ function createWindow() {
     maxHeight: 400,
     minWidth: 300,
     maxWidth: 400,
-    frame: false,
-    transparent: true,
+    frame: true,
+    transparent: false,
     alwaysOnTop: true,
     focusable: false,
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
@@ -54,8 +54,8 @@ function createWindow() {
     minHeight: 70,
     maxWidth: 400,
     minWidth: 300,
-    frame: false,
-    transparent: true,
+    frame: true,
+    transparent: false,
     alwaysOnTop: true,
     focusable: false,
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
@@ -95,6 +95,40 @@ app.on("window-all-closed", () => {
     app.quit();
     win = null;
   }
+});
+ipcMain.on("closeApp", () => {
+  if (process.platform !== "darwin") {
+    app.quit();
+    win = null;
+    studio = null;
+    floatingWebCam = null;
+  }
+});
+ipcMain.handle("getSources", async () => {
+  const data = await desktopCapturer.getSources({
+    thumbnailSize: { height: 100, width: 150 },
+    fetchWindowIcons: true,
+    types: ["window", "screen"]
+  });
+  console.log("Displays", data);
+  return data;
+});
+ipcMain.on("media-sources", (event, payload) => {
+  console.log(event);
+  studio == null ? void 0 : studio.webContents.send("profile-recieved", payload);
+});
+ipcMain.on("resize-studio", (event, payload) => {
+  console.log(event);
+  if (payload.shrink) {
+    studio == null ? void 0 : studio.setSize(400, 100);
+  }
+  if (!payload.shrink) {
+    studio == null ? void 0 : studio.setSize(400, 250);
+  }
+});
+ipcMain.on("hide-plugin", (event, payload) => {
+  console.log(event);
+  win == null ? void 0 : win.webContents.send("hide-plugin", payload);
 });
 app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {
